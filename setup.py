@@ -22,7 +22,7 @@ setup(
     packages=['kalamine'],
     entry_points={
         'console_scripts': [
-            'kalamine = kalamine.cli:make',
+            'kalamine = kalamine.cli:cli',
             'xkalamine = kalamine.cli_xkb:cli',
         ]
     },

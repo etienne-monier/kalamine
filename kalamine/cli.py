@@ -9,6 +9,11 @@ from .layout import KeyboardLayout
 from .server import keyboard_server
 
 
+@click.group()
+def cli():
+    pass
+
+
 def pretty_json(layout, path):
     """ Pretty-prints the JSON layout. """
     text = json.dumps(layout.json, indent=2, ensure_ascii=False) \
@@ -56,24 +61,16 @@ def make_all(layout, subdir):
     print('... ' + json_path)
 
 
-@click.command()
-@click.argument('input', nargs=-1, type=click.Path(exists=True))
-@click.option('--version', '-v', is_flag=True)
-@click.option('--watch', '-w', is_flag=True)
+@cli.command()
+@click.argument('layout_descriptors', nargs=-1, type=click.Path(exists=True))
 @click.option('--out',
               default='all',
               type=click.Path(),
-              help='Keyboard driver(s) to generate.')
-def make(input, version, watch, out):
-    """ Convert toml/yaml descriptions into OS-specific keyboard layouts. """
+              help='Keyboard drivers to generate.')
+def make(layout_descriptors, out):
+    """ Convert TOML/YAML descriptions into OS-specific keyboard drivers. """
 
-    if version:
-        print(f"kalamine { pkg_resources.require('kalamine')[0].version }")
-
-    if watch:
-        keyboard_server(input[0])
-
-    for input_file in input:
+    for input_file in layout_descriptors:
         layout = KeyboardLayout(input_file)
 
         # default: build all in the `dist` subdirectory
@@ -110,5 +107,16 @@ def make(input, version, watch, out):
         print('... ' + output_file)
 
 
-if __name__ == '__main__':
-    make()
+@cli.command()
+@click.argument('input', nargs=1, type=click.Path(exists=True))
+def watch(input):
+    """ Watch a TOML/YAML description and display it in a web server. """
+
+    keyboard_server(input)
+
+
+@cli.command()
+def version():
+    """ Show version number and exit. """
+
+    print(f"kalamine { pkg_resources.require('kalamine')[0].version }")
