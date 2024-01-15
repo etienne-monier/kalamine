@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
-from .utils import load_data, LAYER_KEYS, ODK_ID
 
+from typing import TYPE_CHECKING
+
+from .utils import LAYER_KEYS, ODK_ID, load_data
+
+if TYPE_CHECKING:
+    from .layout import KeyboardLayout
 
 ###
 # Helpers
@@ -385,8 +390,14 @@ def osx_terminators(layout):
 # https://github.com/fabi1cazenave/x-keyboard
 #
 
-def web_keymap(layout):
-    """ Web layout, main part. """
+def web_keymap(layout: "KeyboardLayout") -> dict[str, list[str]]:
+    """Web layout, main part.
+
+    Returns
+    -------
+    dict[str, list[str]]
+        A dict whose keys are key ids and values are list of characters (length 2-4).
+    """
 
     keymap = {}
     for key_name in LAYER_KEYS:
@@ -402,8 +413,14 @@ def web_keymap(layout):
     return keymap
 
 
-def web_deadkeys(layout):
-    """ Web layout, dead keys. """
+def web_deadkeys(layout: "KeyboardLayout") -> dict[str, dict[str, str]]:
+    """Web layout, dead keys.
+
+    Returns
+    -------
+    dict[str, dict[str, str]]
+        A dict whose keys are deadkeys and values are key mapping.
+    """
 
     deadkeys = {}
     if layout.has_1dk:  # ensure 1dk is first in the dead key dictionary
