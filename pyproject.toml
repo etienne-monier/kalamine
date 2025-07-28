@@ -32,7 +32,7 @@ dependencies = [
     "progress",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest",
     "lxml",
@@ -40,6 +40,7 @@ dev = [
     "ruff>=0.8.0",
     "types-PyYAML",
     "twine>=5.1.1",
+    "mkdocs-material>=9.6.16",
 ]
 
 [project.urls]
